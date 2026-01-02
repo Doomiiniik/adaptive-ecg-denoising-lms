@@ -1,0 +1,12 @@
+# Python environment
+dsp_env/
+__pycache__/
+*.py[cod]
+
+# Data and results 
+data/*.csv
+data/*.npy
+reports/*.png
+
+# System files
+.DS_Store
