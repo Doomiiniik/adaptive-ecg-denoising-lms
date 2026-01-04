@@ -16,20 +16,19 @@ def generate_data(fs, T):
     
     Returns:
     n (array): Discrete time index
-    s (array): Clean signal (sygnał użyteczny)
-    x (array): Primary input (sygnał wejściowy zaszumiony)
-    r (array): Reference signal (sygnał odniesienia)
+    s (array): Clean signal 
+    x (array): Primary input signal (corrupted ECG)
+    r (array): Reference signal (wall socket simulation)
     """
     
     
     # N is the total number of samples 
-    # N = T * fs = time of the signal * amount of samples per second
     N = int(T * fs)
     
     # n is array with the sample numebers
     n = np.arange(N)
     
-    # t is the array with the totall time after every sample
+    # t is the array with the time values in seconds
     t = n / fs 
     
     # Generate s[n] - The Clean Signal (Target)
@@ -43,6 +42,7 @@ def generate_data(fs, T):
         # Position of the beat in seconds
         pos = (i + initial_phase) / f_heart
         # Add a Gaussian pulse at that position
+        # to make it look like a heartbeat
         s += np.exp(-1000 * (t - pos)**2) # the highest pulse in pos time, 
         #others are goint to 0
     
@@ -74,14 +74,15 @@ def generate_data(fs, T):
 
     # in real word wall socket do not contain drift,
     # but it is needed for the filter to work properly 
+    # because otherwise filter cannot distingush between 
+    # 50Hz noise and low frequency drift
 
 
 
-    # 5. Generate r[n] - The Reference Signal
+    # Generate r[n] - The Reference Signal
     # This simulates measuring the voltage directly from the wall outlet.
     # It is correlated with v[n], but has different phase/amplitude.
-    # Instead of just r = noise + drift
-    # We give the filter a "clue" about the phase
+    
     r = np.sin(2 * np.pi * f_line * t ) + drift
     # we deliberetly give it no phase to make filter do some work
     
@@ -96,17 +97,17 @@ def generate_data(fs, T):
 if __name__ == "__main__":
 
  
+# determine the directory of the current script
 
-# 1. Get the directory where THIS script is located (the 'src' folder)
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# 2. Go one level up to the main project directory (ECG_Adaptive_Filter)
+# go one level up to the main project directory (ECG_Adaptive_Filter)
     project_root = os.path.dirname(script_dir)
 
-# 3. Define the path to the results/plots folder
+# define the path to the results/plots folder
     output_dir = os.path.join(project_root, 'results', 'plots')
 
-# 4. Create the folder if it doesn't exist
+# create the folder if it doesn't exist
     if not os.path.exists(output_dir):
       os.makedirs(output_dir)
       print(f"Created directory: {output_dir}")
@@ -123,8 +124,8 @@ if __name__ == "__main__":
     
     
     
-    # --- Plotting ---
-# We set a larger figure size (width=10, height=8) for 3 subplots
+   
+
     plt.figure(figsize=(10, 8))
 
 # Plot 1: The Clean Heartbeat s[n]
@@ -149,10 +150,10 @@ if __name__ == "__main__":
     plt.legend()
     plt.grid(True)
 
-    # This prevents titles from overlapping
+    
     plt.tight_layout()
 
-    # --- THE SAVING PART ---
+    #SAVING
     # Use the output_dir we defined earlier
     file_name = "ecg_signal_generation.png"
     save_path = os.path.join(output_dir, file_name)
@@ -160,5 +161,5 @@ if __name__ == "__main__":
     plt.savefig(save_path)
     print(f"Success! Image saved to: {save_path}")
 
-    # Close the figure to free up memory (good practice in DSP)
+    
     plt.close()

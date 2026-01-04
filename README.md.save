@@ -34,7 +34,7 @@ Typical results from a 12-second simulation:
 
 ```text
 /ECG_Adaptive_Filter
-├── main.py
+|
 ├── src/
 │   ├── lms_algorithm.py    # Main filter logic, SNR calc, and BPM detection
 │   └── generate_signals.py # Synthetic data generator
@@ -46,5 +46,4 @@ Typical results from a 12-second simulation:
 1. Clone the repo: `git clone https://github.com/YOUR_USERNAME/adaptive-ecg-denoising-lms.git`
 2. Install dependencies: `pip install numpy matplotlib`
 4. Run command: source `dsp_env/bin/activate`
-3. Run the simulation: `python main.py` to run the full simulation, or run individual script `python src/lms_algorithm.py`
-
+3. Run the simulation: `python src/lms_algorithm.py`
