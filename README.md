@@ -28,4 +28,5 @@ The filter successfully converges within the first 200 samples, significantly re
 ## 🛠️ Installation & Usage
 1. Clone the repo: `git clone https://github.com/YOUR_USERNAME/adaptive-ecg-denoising-lms.git`
 2. Install dependencies: `pip install numpy matplotlib`
+4. Run command: source dsp_env/bin/activate
 3. Run the simulation: `python src/lms_algorithm.py`

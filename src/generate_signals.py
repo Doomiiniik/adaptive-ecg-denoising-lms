@@ -67,12 +67,27 @@ def generate_data(fs, T):
     # x[n] - The Primary Input
     # This is what the sensor actually records: Signal + Noise
     x = s + v
-    
+
+    # adding breathing drift
+    drift = 0.5 * np.sin(2 * np.pi * 0.5 * t)
+    x = x + drift
+
+    # in real word wall socket do not contain drift,
+    # but it is needed for the filter to work properly 
+
+
+
     # 5. Generate r[n] - The Reference Signal
     # This simulates measuring the voltage directly from the wall outlet.
     # It is correlated with v[n], but has different phase/amplitude.
-    r = np.sin(2 * np.pi * f_line * t)
+    # Instead of just r = noise + drift
+    # We give the filter a "clue" about the phase
+    r = np.sin(2 * np.pi * f_line * t ) + drift
     # we deliberetly give it no phase to make filter do some work
+    
+   
+                
+
 
 
 
@@ -101,7 +116,7 @@ if __name__ == "__main__":
 
     # Simulation Parameters
     FS = 1000  # Hz
-    T_total = 2.0  # Seconds
+    T_total = 12.0  # Seconds
     
     # Generate the data
     n_idx, s_clean, x_noisy, r_ref = generate_data(FS, T_total)
